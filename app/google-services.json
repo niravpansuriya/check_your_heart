@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "169858362482",
+    "project_id": "checkyourheart-119cc",
+    "storage_bucket": "checkyourheart-119cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169858362482:android:0c03f0c7fbbcaa283aa6eb",
+        "android_client_info": {
+          "package_name": "com.example.dhasu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169858362482-8qsc9vlvfd72i1aboflb3r6d3dmn9hkj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzUqmgOiCC1y5rVJIVC6S_KE-h0ehyyn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169858362482-8qsc9vlvfd72i1aboflb3r6d3dmn9hkj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
