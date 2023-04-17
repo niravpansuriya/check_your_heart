@@ -17,19 +17,21 @@ import com.google.firebase.messaging.RemoteMessage
 
 class PushNotification: FirebaseMessagingService() {
 
+    // when FCM token will be updated
     override fun onNewToken(token: String){
         super.onNewToken(token)
         Log.d("INFO", "FCM registration new token: $token")
         setToken(token)
     }
+
+    // this will be called when firebase will push the notification
     @SuppressLint("ServiceCast")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-            Log.d("custominfo","received")
             val message = if(remoteMessage.notification!!.body == "normal") "Your heart rate is normal !" else "Your heart rate is abnormal"
             createNotification(this, "Result is ready!!!", message)
         }
 
-
+    // create notification
     fun createNotification(context: Context, title: String?, message: String?) {
         // Create a Notification Manager
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -42,7 +44,7 @@ class PushNotification: FirebaseMessagingService() {
 
         // Create a Notification Builder
         val builder = NotificationCompat.Builder(context, "channel_id")
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

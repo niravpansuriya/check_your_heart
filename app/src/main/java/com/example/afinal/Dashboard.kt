@@ -16,7 +16,6 @@ class Dashboard : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
     private lateinit var drawer: DrawerLayout
     private var mAuth = FirebaseAuth.getInstance()
-//    private var database = FirebaseDatabase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +46,8 @@ class Dashboard : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         establishCloudMessagingConnection()
     }
 
+    // when someone will select the new item in nav bar, this will be called
+    // it will change the fragment according to user's choice
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_record -> supportFragmentManager.beginTransaction()

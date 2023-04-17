@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseError
 
-
+// this class represents history fragment
 class History : Fragment(R.layout.fragment_history) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -21,9 +21,9 @@ class History : Fragment(R.layout.fragment_history) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         var tableDataList = listOf<TableData>()
 
+        // get history data
         getHistory(
             { data: MutableList<Map<String, Any>>?->
-                Log.d("customtag","here 1")
 
                 if(data != null) {
                     tableDataList = data.map { map ->
@@ -37,7 +37,6 @@ class History : Fragment(R.layout.fragment_history) {
                 recyclerView.adapter = TableDataAdapter(tableDataList)
             },
             {error: DatabaseError->
-                Log.d("customtag","here 2")
 
                 Toast.makeText(requireContext(), "There is something wrong", Toast.LENGTH_SHORT)
             }

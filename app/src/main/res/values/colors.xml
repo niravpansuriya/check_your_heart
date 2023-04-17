@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="background">#EEEDEF</color>
-    <color name="normal_result">#4CAF50</color> <!-- Green -->
-    <color name="abnormal_result">#F44336</color> <!-- Red -->
+    <color name="colorPrimary">#89375F</color>
+    <color name="colorPrimaryDark">#CE5959</color>
+    <color name="colorAccent">#BACDDB</color>
+    <color name="background">#F3E8FF</color>
+    <color name="normal_result">#609966</color> <!-- Green -->
+    <color name="abnormal_result">#E74646</color> <!-- Red -->
 </resources>

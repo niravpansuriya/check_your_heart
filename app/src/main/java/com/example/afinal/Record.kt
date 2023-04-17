@@ -1,12 +1,19 @@
 package com.example.afinal
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaRecorder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +33,7 @@ import java.io.IOException
 data class RequestBody(val username: String, val filename: String)
 data class Response(val message: String, val success: Boolean)
 
+// this represents record fragment
 class Record : Fragment() {
 
     private val PERMISSION_RECORD_AUDIO = android.Manifest.permission.RECORD_AUDIO
@@ -38,28 +46,35 @@ class Record : Fragment() {
     private lateinit var fileName: String
     private lateinit var Storage: StorageReference
     private var isRecording = false;
-    private lateinit var client: OkHttpClient
+    private lateinit var runnable: Runnable;
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        client =  OkHttpClient();
+
         val v = inflater.inflate(R.layout.fragment_record, container, false)
         ButtonRecord = v.findViewById(R.id.button_record_record)
         TVRecord = v.findViewById(R.id.tv_record)
         Storage = FirebaseStorage.getInstance().reference
+
+        // recording will be stored here
         fileName = Environment.getExternalStorageDirectory().absolutePath + "/heart_sound.mp3"
+
         ButtonRecord.setOnClickListener(View.OnClickListener {
+                // if app is not recording, then check permission and start recording
                 if (!isRecording) {
                     if(checkPermissions()){
                         startRecording()
                         TVRecord.setText("Press button to stop recording")
+                        TVRecord.setTextColor(getResources().getColor(R.color.colorPrimaryDark))
                         ButtonRecord.setActivated(true)
                     }
                 } else {
+                    // if app is recording, then stop recording
                     stopRecording()
+                    removeAutoStop()
                     ButtonRecord.setActivated(false)
                     ButtonRecord.setEnabled(false)
                 }
@@ -109,6 +124,7 @@ class Record : Fragment() {
                 prepare()
                 start()
                 isRecording = true
+                setAutoStop();
             } catch (e: IOException) {
                 Toast.makeText(requireActivity(), "Recording failed", Toast.LENGTH_SHORT).show()
             }
@@ -124,6 +140,30 @@ class Record : Fragment() {
         isRecording = false
     }
 
+    // this will by default stop recording if someone will not stop it
+    private fun setAutoStop(){
+        val handler = Handler(Looper.getMainLooper())
+
+        runnable = Runnable {
+            if(isRecording){
+                stopRecording()
+                vibrateDevice(requireContext());
+                ButtonRecord.setActivated(false)
+                ButtonRecord.setEnabled(false)
+            }
+        }
+
+        val delayInMillis: Long = 10000
+        handler.postDelayed(runnable, delayInMillis)
+    }
+
+    private fun removeAutoStop(){
+        val handler = Handler(Looper.getMainLooper())
+
+        handler.removeCallbacks(runnable)
+    }
+
+    // it will upload audio on firebase storage
     private fun uploadAudio() {
         val userId = getUserUId();
         if(userId != ""){
@@ -131,6 +171,8 @@ class Record : Fragment() {
             val filepath = Storage!!.child("Audio").child(fName)
             val uri = Uri.fromFile(File(fileName))
             filepath.putFile(uri).addOnSuccessListener {
+                // on successful upload of audio on Firebase
+                // make api call on Flask server to process the audio
                 checkFile(getUserUId(), fName)
             }
         }
@@ -140,6 +182,22 @@ class Record : Fragment() {
         }
     }
 
+    // vibrate device when recording will be automatically stopped
+    fun vibrateDevice(context: Context) {
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // For API 26 and above
+            val vibrationEffect = VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
+            vibrator.vibrate(vibrationEffect)
+        } else {
+            // For API 25 and below
+            @Suppress("DEPRECATION")
+            vibrator.vibrate(500)
+        }
+    }
+
+    // make api call on Flask server to process the audio file
     private fun checkFile(username: String, filename: String){
         val requestBody = RequestBody(username, filename)
 
@@ -151,6 +209,8 @@ class Record : Fragment() {
                     Log.d("MESSAGE","success")
 
                     TVRecord!!.text = "Upload finished! You'll get a notification about the outcome shortly, usually within half minute."
+//                    TVRecord!!.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+
                     TVRecord!!.setTextColor(getResources().getColor(R.color.colorAccent))
 
                 } else {

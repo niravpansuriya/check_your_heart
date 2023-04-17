@@ -58,7 +58,7 @@ class Share : Fragment() {
 
 
     private fun shareHistory() {
-        // Replace this with your actual data
+        // get history data from Firebase
         var historyData = listOf<Map<String, Any>>()
         getHistory(
             { data: MutableList<Map<String, Any>>?->
@@ -79,6 +79,7 @@ class Share : Fragment() {
         );
     }
 
+    // generate csv with given data
     private fun generateCsvContent(data: List<Map<String, Any>>): String {
         val header = "Date,Time,Result"
         val rows = data.joinToString("\n") { row ->
@@ -87,6 +88,7 @@ class Share : Fragment() {
         return "$header\n$rows"
     }
 
+    // save csv to local storage in device
     private suspend fun saveCsvToFile(context: Context, fileName: String, content: String): File =
         withContext(IO) {
             val file = File(context.cacheDir, fileName)
@@ -96,6 +98,7 @@ class Share : Fragment() {
             file
         }
 
+    // share saved csv file on social media
     private fun shareCsvFile(context: Context, file: File) {
         val contentUri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
         val shareIntent = Intent(Intent.ACTION_SEND).apply {

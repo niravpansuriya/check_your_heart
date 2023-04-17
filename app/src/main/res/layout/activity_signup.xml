@@ -35,6 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
+            android:padding="10dp"
+            android:background="@drawable/edit_text_bg"
             android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -54,6 +56,9 @@
             android:id="@+id/editText8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/edit_text_bg"
+
             android:hint="Password"
             android:inputType="textPassword" />
 
@@ -74,6 +79,8 @@
             android:id="@+id/editText9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/edit_text_bg"
             android:hint="Confirm Password"
             android:inputType="textPassword" />
 
@@ -116,4 +123,3 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

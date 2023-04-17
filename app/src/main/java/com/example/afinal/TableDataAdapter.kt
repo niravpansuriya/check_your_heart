@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 
+// this draws a table in history fragment
 class TableDataAdapter(private val tableDataList: List<TableData>) : RecyclerView.Adapter<TableDataAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -17,19 +18,25 @@ class TableDataAdapter(private val tableDataList: List<TableData>) : RecyclerVie
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        // columns name
         if (position == 0) {
             // Set column titles
             holder.dateTextView.text = "Date"
             holder.timeTextView.text = "Time"
             holder.resultTextView.text = "Result"
         } else {
+
             val tableData = tableDataList[position-1]
             holder.dateTextView.text = tableData.date
             holder.timeTextView.text = tableData.time
 
             holder.resultTextView.text = tableData.result
             holder.resultTextView.setTextColor(
+                // if result is normal, then text color is Green
                 if (tableData.result == "normal") holder.itemView.context.getColor(R.color.normal_result)
+
+                // if result is abnormal, then text color is Red
                 else holder.itemView.context.getColor(R.color.abnormal_result)
             )
         }

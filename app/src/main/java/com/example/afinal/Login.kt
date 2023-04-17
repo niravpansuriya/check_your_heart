@@ -95,6 +95,7 @@ class Login : AppCompatActivity() {
 
     }
 
+    // sign in with google
     private fun signInWithGoogle() {
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -110,6 +111,7 @@ class Login : AppCompatActivity() {
                 val account = result?.signInAccount
                 val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
 
+                // normal authentication with firebase
                 FirebaseAuth.getInstance().signInWithCredential(credential)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
